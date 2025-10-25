@@ -29,16 +29,20 @@ const Stdin = struct {
 
     pub fn last(self: *Stdin, comptime T: type) !T {
         const token = try self.reader.takeDelimiterExclusive('\n');
+        _ = try self.reader.take(1);
         return try Stdin.parse(T, token);
     }
 
     pub fn next(self: *Stdin, comptime T: type) !T {
         const token = try self.reader.takeDelimiterExclusive(' ');
+        _ = try self.reader.take(1);
         return try Stdin.parse(T, token);
     }
 
     pub fn nextLine(self: *Stdin) ![]u8 {
-        return try self.reader.takeDelimiterExclusive('\n');
+        const line = try self.reader.takeDelimiterExclusive('\n');
+        _ = try self.reader.take(1);
+        return line;
     }
 
     pub fn nextList(self: *Stdin, comptime T: type, list: []T) !usize {
