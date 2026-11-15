@@ -1,9 +1,14 @@
 from __builtins__ import *
 
+# REPLACES 02_program.py
+
 # This is the third program. Use it
 # to unlock the following upgrades:
-# - Expand I
+# - * Expand I
 # - Plant
+# Then MOVE to 04_program.py AND
+# REPLACE later with 06_program.py
+# * Wait to unlock last
 
 # [x] Needs 1x harvest() every 300 ticks
 # - Speed: 600 ticks per second

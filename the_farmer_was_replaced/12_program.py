@@ -1,35 +1,48 @@
 from __builtins__ import *
-from behaviors import *
+
+# REPLACES 09_program.py
 
 # This is the twelfth program. Use it
 # to unlock the following upgrades:
-# - Speed V
-# Note: You'll need to use 10_program.py to
-# harvest any necessary Wood, and 11_program.py
-# to harvest any necessary Hay
+# - N/A
+# Note: You'll need to use 13_program.py to
+# harvest any necessary Wood, and 14_program.py
+# to harvest any necessary Carrots
 
-# [x] Needs 18x harvest() every 10_800 ticks
+# [x] Needs 1x harvest() every 400 ticks
 # - Speed: 2025 ticks per second
-# - Growth (Carrot): 6.0 s, or 12_150 ticks
+# - Growth (Grass): 0.5 s, or 1012.5 ticks
 # - harvest(): 200 ticks
-# - plant(): 200 ticks
 # - move(): 200 ticks
 # - can_harvest(): 1 tick
-# Note: A 6x3 rectangle is of sufficiently large
-# size that the expected time to farm all 18 cells
-# is nearly the same as the mean time for a carrot
-# to grow. A single application of water on each
-# cell ensures that the carrots grow quickly enough,
-# and the water needed is consumed at a rate of 0.82 s,
-# which is very close to the restock rate of 0.8 s.
+# Note: At this speed, the drone can harvest two
+# cells with Grass before any one Grass grows
+# back. As such, the harvest needs to harvest
+# a 2x2 of Grass instead.
 
-def main():
-    while harvest_rect(6, 3, Entities.Carrot):
-        continue
+def farm_grass():
+    if get_ground_type() != Grounds.Grassland:
+        till()
+    else:
+        harvest()
 
-    clear_rect(6, 3)
     return
 
 
-if __name__ == "__main__":
-    main()
+while True:
+    for x in range(2):
+        for y in range(2):
+            farm_grass()
+
+            if x + 1 == 2 and y + 1 == 2:
+                continue
+
+            if x % 2 == 0 and y + 1 < 2:
+                move(North)
+            elif x % 2 == 1 and y + 1 < 2:
+                move(South)
+            else:
+                move(East)
+
+    move(West)
+

@@ -1,8 +1,13 @@
 from __builtins__ import *
 
-# This is the fourth program. Use it
+# REPLACES 04_program.py
+
+# This is the fifth program. Use it
 # to unlock the following upgrades:
-# - Speed II
+# - * Speed II
+# Then REPLACE with 07_program.py AND
+# REPLACE 03_program.py with 06_program.py
+# * Wait to unlock last
 
 # [x] Needs 4x harvest() every 2400 ticks
 # - Speed: 600 ticks per second
@@ -14,10 +19,9 @@ from __builtins__ import *
 
 while True:
     for i in range(4):
-        while not can_harvest():
-            continue
-        harvest()
-        plant(Entities.Bush)
+        if can_harvest():
+            harvest()
+            plant(Entities.Bush)
 
         if i == 0:
             move(North)

@@ -1,37 +1,50 @@
 from __builtins__ import *
-from behaviors import *
+
+# REPLACES 10_program.py
 
 # This is the thirteenth program. Use it
 # to unlock the following upgrades:
-# - Lists
-# - Sunflowers
-# - Pumpkins I
-# Note: You'll need to use 10_program.py to
-# harvest any necessary Wood, and 11_program.py
-# to harvest any necessary Hay
+# - N/A
+# Note: You'll need to use 12_program.py to
+# harvest any necessary Hay, and 14_program.py
+# to harvest any necessary Carrots
 
 # [x] Needs 24x harvest() every 14_400 ticks
-# - Speed: 3037.5 ticks per second
-# - Growth (Carrot): 6.0 s, or 18_225 ticks
+# - Speed: 2025 ticks per second
+# - Growth (Tree): 7.0 s, or 14_175 ticks
 # - harvest(): 200 ticks
 # - plant(): 200 ticks
 # - move(): 200 ticks
 # - can_harvest(): 1 tick
-# Note: A 6x4 rectangle is of sufficiently large
-# size that the expected time to farm all 18 cells
-# is nearly the same as the mean time for a carrot
-# to grow. A single application of water on each
-# cell ensures that the carrots grow quickly enough,
-# and the water needed is consumed at a rate of 1.26 s,
-# which is close enough to the restock rate of 0.8 s.
 
-def main():
-    while harvest_rect(6, 4, Entities.Carrot):
-        continue
+def farm_wood(x, y):
+    if can_harvest():
+        harvest()
+    elif (
+            get_water() < 14400 / 2025 * 0.01 + 1.4 / 7
+            and num_items(Items.Water) > 0
+            and (x * 4 + y) % 2 == 0
+    ):
+        use_item(Items.Water)
 
-    clear_rect(6, 4)
+    if (x * 4 + y) % 2 == 0:
+        plant(Entities.Tree)
+    else:
+        plant(Entities.Bush)
+
     return
 
 
-if __name__ == "__main__":
-    main()
+
+while True:
+    for x in range(6):
+        for y in range(4):
+            farm_wood()
+
+            if x % 2 == 0 and y + 1 < 4:
+                move(North)
+            elif x % 2 == 1 and y + 1 < 4:
+                move(South)
+            else:
+                move(East)
+

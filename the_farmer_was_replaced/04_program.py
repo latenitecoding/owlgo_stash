@@ -2,10 +2,12 @@ from __builtins__ import *
 
 # This is the fourth program. Use it
 # to unlock the following upgrades:
-# - Expand II
+# - * Expand II
 # - Operators
 # Note: You'll need to use 03_program.py to
 # harvest the necessary Hay
+# Then REPLACE with 05_program.py
+# * Wait to unlock last
 
 # [x] Needs 2x harvest() every 2400 ticks
 # - Speed: 600 ticks per second
@@ -21,7 +23,9 @@ from __builtins__ import *
 # between 600-1080 ticks. It is possible to also
 # harvest 2-3x Grass in that same waiting period. My
 # recommendation is to harvest 2x Bush and 3x Grass
-# every 2400 ticks to best utilize that time.
+# every 2400 ticks to best utilize that time. A neat
+# way to accomplish this is to slide which two cells
+# have the Bush.
 
 while True:
     while True:

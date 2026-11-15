@@ -8,6 +8,7 @@ from __builtins__ import *
 # Speed III:    1350 ticks
 # Speed IV:     2025 ticks
 # Speed V:      3037.5 ticks
+# W/ Power:     6075 ticks
 
 # Growth
 # =======================================
@@ -36,10 +37,10 @@ from __builtins__ import *
 # Watering III:     0.4 s
 # Watering IV:      0.8 s
 # Watering V:       1.6 s
-# Watering VI:      10 s
-# Watering VII:     10 s
-# Watering VIII:    10 s
-# Watering IX:      10 s
+# Watering VI:      3.2 s
+# Watering VII:     6.4 s
+# Watering VIII:    12.8 s
+# Watering IX:      25.6 s
 
-change_hat(Hats.Traffic_Cone)
 clear()
+change_hat(Hats.Traffic_Cone)
