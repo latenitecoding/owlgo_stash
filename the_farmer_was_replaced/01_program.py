@@ -2,9 +2,9 @@ from __builtins__ import *
 
 # This is the first program. Use it
 # to unlock the following upgrades:
-# - * While
-# Then REPLACE with 02_program.py
-# * Wait to unlock last
+# - While
+#
+# Then REPLACE with 02_program.py.
 
 
 # [x] Needs 1x harvest() every 200 ticks

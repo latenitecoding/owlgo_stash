@@ -4,9 +4,9 @@ from __builtins__ import *
 
 # This is the second program. Use it
 # to unlock the following upgrades:
-# - * Speed I
-# Then REPLACE with 03_program.py
-# * Wait to unlock last
+# - Speed I
+#
+# Then REPLACE with 03_program.py.
 
 # [x] Needs 1x harvest() every 200 ticks
 # - Speed: 400 ticks per second

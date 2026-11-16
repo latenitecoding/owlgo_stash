@@ -1,56 +1,71 @@
 from __builtins__ import *
 
-# REPLACES 05_program.py
-
 # This is the seventh program. Use it
 # to unlock the following upgrades:
-# - Carrots I
-# - Debug
-# Note: You'll need to use 06_program.py to
-# harvest the necessary Hay
+# - * Expand III
+# - * Speed III
+# - Watering I
+# - Trees I
+# * Wait to unlock last
+# Note: You'll need to use 05_program.py to
+# harvest the necessary Wood, and 06_program.py
+# to harvest any necessary Hay. You'll need to
+# use the clear() script from the README to
+# return the farm to grassland when harvesting Hay.
 #
-# Then MOVE to 08_program.py
+# Then REPLACE with 09_program.py AND
+# REPLACE 05_program.py with 08_program.py.
 
-# [x] Needs 7x harvest() every 4200 ticks
+# [x] Needs 9x harvest() every ~5400 ticks
 # - Speed: 900 ticks per second
-# - Growth (Bush): 4.8 s, or 4320 ticks
+# - Growth (Carrots): 6.0 s, or 5400 ticks
 # - harvest(): 200 ticks
 # - plant(): 200 ticks
 # - move(): 200 ticks
 # - can_harvest(): 1 tick
-# Note: A mean-time strategy without growth
-# rate improvements doesn't harvest resources
-# as efficiently as a max-time strategy. Since
-# 4320 ticks does not evenly divide into 600 ticks,
-# we can use 7x Bush to get close. We could
-# use 8x Bush, but the extra 480 ticks would
-# be lost and wasted. By getting as close to
-# 4320 ticks as we can, we can maximize the
-# amaount of Bush that is ready to be harvested.
-# Farming 7 cells in a 3x3 is quite strange at
-# first glance, but there is a neat way to
-# accomplish this due to how moves can wrap around
-# the farm. There is no proper name for this, so
-# I just call it wraparound mowing. Normally, a
-# mowing strategy always results in the drone
-# returning the starting row every two columns.
-# Having to mow an odd column leaves the drone on
-# the opposite side of the farm. However, since
-# the drone can move with wraparound, it can simply
-# mow the starting row after finishing the first
-# two columns to wrap back to the origin cell.
+# Note: There are only 9x cells, so the max time
+# that we can use is 5400 ticks for all 9x cells
+# if we havest-plant-move on each cell. We do not
+# count till as that only happens on the first pass.
+# As such, we must go for a mean-time strategy rather
+# than a max-time strategy. With a mean-time strategy,
+# it's important not to busy-wait on any growing
+# carrots as this could lead to increasing delays
+# across passes. For example, if the first carrots
+# continues to have a large growth time, then we
+# would have to busy wait on the first carrots when we
+# go to harvest them for the first time. However, the
+# time that we wait on those carrot to grow won't count
+# towards the wait time of the next carrots that
+# we plant as those carrots have not been planted yet.
+# Thus, these first carrots can continue to add to
+# the cumulative total of wasted ticks on each pass.
+# Since the grid is still a 3x3, a traditional mower
+# strategy would require the drone to use two wraparound
+# moves to return to the origin cell. In order to have
+# the drone return to the origin cell in one move, we
+# use a snake-mowing strategy with a final wrapround move.
 
 while True:
-    for i in range(7):
+    for i in range(9):
         if can_harvest():
             harvest()
-            plant(Entities.Bush)
 
-        if i <= 1:
+        if get_ground_type() != Grounds.Soil:
+            till()
+
+        if get_entity_type() != Entities.Carrot:
+            plant(Entities.Carrot)
+
+        if i < 2:
             move(North)
-        elif i == 2:
+        elif i < 4:
             move(East)
-        elif i <= 4:
+        elif i == 4:
+            move(South)
+        elif i == 5:
+            move(West)
+        elif i == 6:
             move(South)
         else:
             move(East)
