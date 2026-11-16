@@ -16,16 +16,6 @@ def dist_to(x):
     return dist_between
 
 
-def get_gtype(etype):
-    if etype == Entities.Grass:
-        return Grounds.Grassland
-
-    if etype == Entities.Carrot:
-        return Grounds.Soil
-
-    return get_ground_type()
-
-
 def get_drone_speed():
     if num_unlocked(Unlocks.Speed) == 1:
         return 600
@@ -46,20 +36,35 @@ def get_drone_speed():
 
 
 def get_mean_grow_time(etype):
+    if etype == Entities.Grass:
+        return 0.5
+
     if etype == Entities.Bush:
-        return 4.0
+        return 4
 
     if etype == Entities.Carrot:
-        return 6.0
+        return 6
 
     if etype == Entities.Tree:
-        return 7.0
+        return 7
 
-    return 0.5
+    if etype == Entities.Pumpkin:
+        return 2
+
+    if etype == Entities.Sunflower:
+        return 7
+
+    if etype == Entities.Cactus:
+        return 1
+
+    if etype == Entities.Rice:
+        return 6
+
+    return 0.2
 
 
-def get_min_water(i, etype):
-    grow_factor = (get_mean_grow_time(etype) * get_drone_speed()) / (i * 600)
+def get_min_water(plot_size, etype):
+    grow_factor = (get_mean_grow_time(etype) * get_drone_speed()) / (plot_size * 600)
 
     if grow_factor <= 1:
         return 0
@@ -67,7 +72,19 @@ def get_min_water(i, etype):
     if grow_factor >= 5:
         return 1.0
 
-    return (grow_factor - 1) * 0.25
+    latency = ((plot_size * 600) / get_drone_speed()) * 0.01
+
+    return (grow_factor - 1) * 0.25 + latency
+
+
+def needs_till(etype):
+    if etype == Entities.Grass:
+        return get_ground_type() != Grounds.Grassland
+
+    if etype == Entities.Carrot or etype == Entities.Pumpkin:
+        return get_ground_type() != Grounds.Soil
+
+    return False
 
 
 def rev_dir(dir):

@@ -8,8 +8,8 @@ from __builtins__ import *
 # - Plant
 # * Wait to unlock last
 #
-# Then MOVE to 04_program.py AND
-# REPLACE later with 06_program.py.
+# Then MOVE to 04_program.py. DO NOT
+# DELETE THIS YET.
 
 # [x] Needs 1x harvest() every 300 ticks
 # - Speed: 600 ticks per second

@@ -4,7 +4,7 @@ from __builtins__ import *
 # to unlock the following upgrades:
 # - * Expand III
 # - * Speed III
-# - Watering I
+# - Watering I (unlock first)
 # - Trees I
 # * Wait to unlock last
 # Note: You'll need to use 05_program.py to
@@ -14,7 +14,8 @@ from __builtins__ import *
 # return the farm to grassland when harvesting Hay.
 #
 # Then REPLACE with 09_program.py AND
-# REPLACE 05_program.py with 08_program.py.
+# REPLACE 05_program.py with 08_program.py AND
+# MOVE to 08_program.py and 09_program.py.
 
 # [x] Needs 9x harvest() every ~5400 ticks
 # - Speed: 900 ticks per second

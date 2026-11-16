@@ -17,8 +17,8 @@ from __builtins__ import *
 # Carrots:      4.8/7.2 s       6.0 s
 # Tree:         5.6/8.4 s       7.0 s
 # Pumpkin:      0.2/3.8 s       2.0 s
-# Cactus:       1.0/1.0 s       1.0 s
 # Sunflower:    5.6/8.4s        7.0 s
+# Cactus:       1.0/1.0 s       1.0 s
 # Dinosaur:     0.18/0.22 s     0.2 s
 # Rice:         4.8/7.2 s       6.0 s
 

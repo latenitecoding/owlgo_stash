@@ -8,7 +8,8 @@ from __builtins__ import *
 # Note: You'll need to use 03_program.py to
 # harvest the necessary Hay.
 #
-# Then REPLACE with 05_program.py.
+# Then REPLACE with 05_program.py AND
+# MOVE to 05_program.py.
 
 # [x] Needs 2x harvest() every 2400 ticks
 # - Speed: 600 ticks per second

@@ -4,7 +4,8 @@ from __builtins__ import *
 # to unlock the following upgrades:
 # - While
 #
-# Then REPLACE with 02_program.py.
+# Then REPLACE with 02_program.py AND
+# MOVE to 02_program.py.
 
 
 # [x] Needs 1x harvest() every 200 ticks

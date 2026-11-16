@@ -10,7 +10,8 @@ from __builtins__ import *
 # Note: You'll need to use 05_program.py to
 # harvest the necessary Wood.
 #
-# Then MOVE to 07_program.py.
+# Then MOVE to 07_program.py. DO NOT
+# DELETE THIS YET.
 
 # [x] Needs 1x harvest() every 400 ticks
 # - Speed: 900 ticks per second
