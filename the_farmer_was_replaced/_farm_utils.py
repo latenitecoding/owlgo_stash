@@ -64,15 +64,15 @@ def get_mean_grow_time(etype):
 
 
 def get_min_water(plot_size, etype):
-    grow_factor = (get_mean_grow_time(etype) * get_drone_speed()) / (plot_size * 600)
+    plot_ticks = plot_size * 600
+    grow_factor = (get_mean_grow_time(etype) * get_drone_speed()) / plot_ticks
+    latency = (plot_ticks / get_drone_speed()) * 0.01
 
     if grow_factor <= 1:
         return 0
 
     if grow_factor >= 5:
         return 1.0
-
-    latency = ((plot_size * 600) / get_drone_speed()) * 0.01
 
     return (grow_factor - 1) * 0.25 + latency
 
@@ -96,4 +96,3 @@ def rev_dir(dir):
         return West
     else:
         return East
-

@@ -70,4 +70,3 @@ while True:
             move(South)
         else:
             move(East)
-

@@ -36,6 +36,7 @@ from __builtins__ import *
 # do so and still stay under the max growth time
 # for Carrots.
 
+
 def farm_carrots():
     if can_harvest():
         harvest()
@@ -50,8 +51,6 @@ def farm_carrots():
 
     if get_entity_type() != Entities.Carrot:
         plant(Entities.Carrot)
-
-    return
 
 
 while True:
@@ -69,4 +68,3 @@ while True:
     for _ in range(2):
         farm_carrots()
         move(East)
-

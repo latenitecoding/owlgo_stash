@@ -15,13 +15,11 @@ from _farming_novice import *
 # efficient means for havesting Hay at the
 # drone's max Speed without Power.
 
+
 def main():
     while farm_plot(2, 2, Entities.Grass):
         go_home()
 
-    return
-
 
 if __name__ == "__main__":
     main()
-
