@@ -14,10 +14,11 @@ from _farmhand import *
 # Note: A 2x2 plot of 4x cells is the most
 # efficient means for havesting Hay at the
 # drone's max Speed without Power.
+PLOT = [2, 2]
 
 
 def main():
-    while farm_plot([2, 2], [Entities.Grass], [0, 0]):
+    while farm_plot(PLOT, [Entities.Grass], [0, 0]):
         continue
 
 

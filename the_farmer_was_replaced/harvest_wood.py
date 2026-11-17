@@ -23,14 +23,16 @@ from _farmhand import *
 # to mean growth farming is to Water a cell when it
 # can't be harvested. As such, decreasing the plot size
 # naturally pushes cells to receive more Water.
+PLOTS = [[4, 4], [2, 2]]
+
 
 def main():
     go_home()
 
-    while farm_plots([[4, 4], [2, 2]], [[Entities.Tree, Entities.Bush]]):
+    while farm_plots(PLOTS, [[Entities.Tree, Entities.Bush]]):
         go_home()
 
-    clear_plots([[4, 4], [2, 2]])
+    clear_plots(PLOTS)
 
 
 if __name__ == "__main__":

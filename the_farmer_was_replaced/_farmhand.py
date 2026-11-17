@@ -22,9 +22,9 @@ def clear_it():
 
 def clear_plot(plot, start_pos=[0, 0], return_home=True):
     if len(plot) != 2:
-        return False
+        return
     if len(start_pos) != 0 and len(start_pos) != 2:
-        return False
+        return
 
     if len(start_pos) == 2:
         goto(start_pos[0], start_pos[1])
@@ -66,7 +66,7 @@ def clear_plots(lo_plots, lo_starts=[], return_home=True):
 
 def farm_it(etype, min_water=0, no_harvest=False):
     # Returns False if the drone fails after
-    # attempting to plant in this cell
+    # attempting to plant in this cell.
     if get_entity_type() == Entities.Dead_Pumpkin:
         harvest()
 
@@ -91,7 +91,7 @@ def farm_it(etype, min_water=0, no_harvest=False):
 
 def farm_plot(plot, lo_etypes, start_pos=[], reverse=False):
     # Returns False if the drone fails after
-    # attempting to plant in this plot
+    # attempting to plant in this plot, or bad args.
     if len(plot) != 2:
         return False
     if len(start_pos) != 0 and len(start_pos) != 2:
@@ -112,7 +112,7 @@ def farm_plot(plot, lo_etypes, start_pos=[], reverse=False):
             i = x * Y + y
 
             etype = lo_etypes[i % len(lo_etypes)]
-            min_water = get_min_water(plot_size, etype)
+            min_water = get_mean_water(plot_size, etype)
 
             if not farm_it(etype, min_water):
                 return False
@@ -125,7 +125,7 @@ def farm_plot(plot, lo_etypes, start_pos=[], reverse=False):
 
 def farm_plots(lo_plots, lolo_etypes, lo_starts=[], lo_reverse=[]):
     # Returns False if the drone fails after
-    # attempting to plant in any plot
+    # attempting to plant in any plot, or bad args.
     if len(lolo_etypes) < 1:
         lolo_etypes = [[Entities.Grass]]
 
@@ -152,14 +152,13 @@ def plant_plot(plot, lo_etypes, start_pos=[], reverse=False):
     # - number of plants planted,
     # - number of plants growing, and
     # - False if the drone fails after attempting
-    #   to plant in this plot
+    #   to plant in this plot, or bad args.
     if len(plot) != 2:
         return 0, 0, False
     if len(start_pos) != 0 and len(start_pos) != 2:
         return 0, 0, False
-
     if len(lo_etypes) < 1:
-        return 0, 0, True
+        return 0, 0, False
 
     if len(start_pos) == 2:
         goto(start_pos[0], start_pos[1])
@@ -168,30 +167,30 @@ def plant_plot(plot, lo_etypes, start_pos=[], reverse=False):
     Y = plot[1]
     plot_size = X * Y
 
-    total_planted = 0
-    total_growing = 0
+    c_plant = 0
+    c_grow = 0
 
     for x in range(X):
         for y in range(Y):
             i = x * Y + y
 
             etype = lo_etypes[i % len(lo_etypes)]
-            min_water = get_min_water(plot_size, etype)
+            min_water = get_mean_water(plot_size, etype)
 
             prev_etype = get_entity_type()
             if not farm_it(etype, min_water, True):
-                return False
+                return c_plant, c_grow, False
 
             if prev_etype != etype and get_entity_type() == etype:
-                total_planted += 1
+                c_plant += 1
 
             if not can_harvest():
-                total_growing += 1
+                c_grow += 1
 
             if i + 1 < plot_size:
                 move(get_next_move(Y, i, reverse))
 
-    return total_planted, total_growing, True
+    return c_plant, c_grow, True
 
 
 def plant_plots(lo_plots, lolo_etypes, lo_start=[], lo_reverse=[]):
@@ -199,12 +198,12 @@ def plant_plots(lo_plots, lolo_etypes, lo_start=[], lo_reverse=[]):
     # - number of plants planted,
     # - number of plants growing, and
     # - False if the drone fails after attempting
-    #   to plant in any plot
+    #   to plant in any plot, or bad args.
     if len(lolo_etypes) < 1:
-        return 0, 0, True
+        return 0, 0, False
 
-    total_planted = 0
-    total_growing = 0
+    c_plant = 0
+    c_grow = 0
 
     for i in range(len(lo_plots)):
         lo_etypes = lolo_etypes[i % len(lolo_etypes)]
@@ -215,56 +214,23 @@ def plant_plots(lo_plots, lolo_etypes, lo_start=[], lo_reverse=[]):
 
         reverse = len(lo_reverse) > 0 and lo_reverse[i % len(lo_reverse)]
 
-        num_planted, num_growing, ok = plant_plot(lo_plots[i], lo_etypes, start_pos, reverse)
+        n_plant, n_grow, ok = plant_plot(
+            lo_plots[i],
+            lo_etypes,
+            start_pos,
+            reverse
+        )
 
-        total_planted += num_planted
-        total_growing += num_growing
+        c_plant += n_plant
+        c_grow += n_grow
 
         if not ok:
-            return total_planted, total_growing, False
+            return c_plant, c_grow, False
 
         if len(lo_starts) == 0 and i + 1 < len(lo_plots):
             move(East)
 
-    return total_planted, total_growing, True
-
-
-def fast_grow(etype):
-    fertilizer_uses = 1
-    grow_factor = get_mean_grow_time(etype) / 2
-
-    while grow_factor >= 5:
-        fertilizer_uses += 1
-        grow_factor /= 2
-
-    min_water = (grow_factor - 1) * 0.25
-    if min_water < 0:
-        min_water = 0
-
-    water_uses = 0
-    while get_water() + water_uses * 0.25 < min_water:
-        water_uses += 1
-
-    if (
-            num_items(Items.Fertilizer) < fertilizer_uses
-            or num_items(Items.Water) < water_uses
-    ):
-        return False, True
-
-    for _ in range(water_uses):
-        use_item(Items.Water)
-
-    while not can_harvest():
-        if get_entity_type() != etype:
-            if not plant(etype):
-                return False, True
-
-        if num_items(Items.Fertilizer) < 1:
-            return True, True
-
-        use_item(Items.Fertilizer)
-
-    return True, True
+    return c_plant, c_grow, True
 
 
 def get_next_move(M, i, reverse=False):
@@ -279,56 +245,6 @@ def get_next_move(M, i, reverse=False):
 
 def go_home():
     goto(0, 0)
-
-
-def seed_it(etype, use_fertilizer=False):
-    if etype == Entities.Grass:
-        return False, True
-
-    if etype == get_entity_type() and can_harvest():
-        return False, True
-
-    if needs_till(etype):
-        till()
-
-    if get_entity_type() != etype and not plant(etype):
-        return False, False
-
-    if not use_fertilizer:
-        return False, True
-
-    return fast_grow(etype)
-
-
-def seed_plot(N, M_signed, etype, use_fertilizer=False, x0=-1, y0=-1):
-    if x0 >= 0 and y0 >= 0:
-        goto(x0, y0)
-
-    M = M_signed
-    if M_signed < 0:
-        M = -1 * M_signed
-
-    num_growing = 0
-    num_infected = 0
-
-    for x in range(N):
-        for y in range(M):
-            i = x * M + y
-
-            infected, ok = seed_it(etype, use_fertilizer)
-            if not ok:
-                return num_growing, num_infected, False
-
-            if get_entity_type() == etype and not can_harvest():
-                num_growing += 1
-
-            if infected:
-                num_infected += 1
-
-            if i + 1 < N * M:
-                move(get_next_move(M_signed, i))
-
-    return num_growing, num_infected, True
 
 
 if __name__ == "__main__":

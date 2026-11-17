@@ -28,28 +28,29 @@ from _farmhand import *
 # can be easily reduced to 1 s if a Pumpkin has not finished
 # growing while ensuring that all re-planted Pumpkins will have
 # grown by a second pass of the same 2x columns. 
+PLOT = [6, 6] # SHOULD BE EVEN SQUARE
 
 
 def main():
-    while farm_plot([6, 6], [Entities.Pumpkin], [0, 0]):
-        total_growing = 6 * 6
+    while farm_plot(PLOT, [Entities.Pumpkin], [0, 0]):
+        c_grow = PLOT[0] * PLOT[1]
         start_pos = [0, 0]
 
-        while total_growing > 0:
-            num_growing = 2 * 6
+        while c_grow > 0:
+            n_grow = 2 * PLOT[1]
 
-            while num_growing > 0:
-                _, num_growing, ok = plant_plot([2, 6], [Entities.Pumpkin], start_pos)
+            while n_grow > 0:
+                _, n_grow, ok = plant_plot([2, PLOT[1]], [Entities.Pumpkin], start_pos)
                 if not ok:
-                    clear_plot([6, 6])
+                    clear_plot(PLOT)
                     return
 
-            total_growing -= 2 * 6
+            c_grow -= 2 * PLOT[1]
             start_pos = [start_pos[0] + 2, 0]
 
         harvest()
 
-    clear_plot(6, 6)
+    clear_plot(PLOT)
     return
 
 

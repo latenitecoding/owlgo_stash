@@ -42,6 +42,34 @@ def get_drone_speed():
     return 400
 
 
+def get_max_grow_time(etype):
+    if etype == Entities.Grass:
+        return 0.5
+
+    if etype == Entities.Bush:
+        return 4.8
+
+    if etype == Entities.Carrot:
+        return 7.2
+
+    if etype == Entities.Tree:
+        return 8.4
+
+    if etype == Entities.Pumpkin:
+        return 3.8
+
+    if etype == Entities.Sunflower:
+        return 8.4
+
+    if etype == Entities.Cactus:
+        return 1
+
+    if etype == Entities.Rice:
+        return 7.2
+
+    return 0.22
+
+
 def get_mean_grow_time(etype):
     if etype == Entities.Grass:
         return 0.5
@@ -70,7 +98,25 @@ def get_mean_grow_time(etype):
     return 0.2
 
 
-def get_min_water(plot_size, etype):
+def get_max_water(plot_size, etype, target_time=0):
+    return get_target_water(
+        plot_size,
+        etype,
+        get_max_grow_time(etype),
+        target_time
+    )
+
+
+def get_mean_water(plot_size, etype, target_time=0):
+    return get_target_water(
+        plot_size,
+        etype,
+        get_mean_grow_time(etype),
+        target_time
+    )
+
+
+def get_target_water(plot_size, etype, grow_time, target_time=0):
     if etype == Entities.Grass:
         return 0
 
@@ -83,10 +129,16 @@ def get_min_water(plot_size, etype):
     # applying water and moving.
     plot_ticks = plot_size // 2 * 600 + (plot_size + 1) // 2 * 400
 
-    if etype == Entities.Pumpkin:
+    if target_time > 0:
+        # The grow factor can be scaled to a particular time
+        # instead, which is useful when applying fertilizer.
+        plot_ticks = target_time * get_drone_speed()
+    elif etype == Entities.Pumpkin:
+        # With Pumpkins, we spend our time replacing Dead Pumpkins
+        # and skipping live Pumpkins.
         plot_ticks = plot_size * 200 + plot_size // 5 * 400
 
-    grow_factor = (get_mean_grow_time(etype) * get_drone_speed()) / plot_ticks
+    grow_factor = (grow_time * get_drone_speed()) / plot_ticks
     latency = (plot_ticks / get_drone_speed()) * 0.01
 
     if grow_factor <= 1:
