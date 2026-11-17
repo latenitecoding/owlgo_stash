@@ -4,7 +4,6 @@ from __builtins__ import *
 # to unlock the following upgrades:
 # - * Expand III
 # - * Speed III
-# - Watering I (unlock first)
 # - Trees I
 # * Wait to unlock last
 # Note: You'll need to use 05_program.py to
@@ -51,6 +50,12 @@ while True:
     for i in range(9):
         if can_harvest():
             harvest()
+        elif (
+                get_water() < 9 * 0.01 + 1.2 / 6
+                and num_items(Items.Water) > 0
+        ):
+            use_item(Items.Water)
+    
 
         if get_ground_type() != Grounds.Soil:
             till()

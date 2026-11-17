@@ -1,5 +1,5 @@
 from __builtins__ import *
-from _farming_novice import *
+from _farmhand import *
 
 # REPLACES 06_program.py
 
@@ -17,8 +17,8 @@ from _farming_novice import *
 
 
 def main():
-    while farm_plot(2, 2, Entities.Grass):
-        go_home()
+    while farm_plot([2, 2], [Entities.Grass], [0, 0]):
+        continue
 
 
 if __name__ == "__main__":

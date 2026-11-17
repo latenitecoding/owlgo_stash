@@ -1,5 +1,5 @@
 from __builtins__ import *
-from _farming_novice import *
+from _farmhand import *
 
 # REPLACES 10_program.py
 
@@ -25,22 +25,13 @@ from _farming_novice import *
 # naturally pushes cells to receive more Water.
 
 def main():
-    while True:
-        if not farm_plot(4, 3, Entities.Carrot):
-            clear_plot(4, 3)
-            return
+    go_home()
 
-        move(East)
-
-        if not farm_plot(2, 2, Entities.Carrot):
-            clear_plot(2, 2, 4, 0)
-            return
-
+    while farm_plots([[4, 3], [2, 2]], [[Entities.Carrot]]):
         go_home()
 
-    return
+    clear_plots([[4, 3], [2, 2]])
 
 
 if __name__ == "__main__":
     main()
-

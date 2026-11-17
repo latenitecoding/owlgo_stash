@@ -12,7 +12,7 @@ from __builtins__ import *
 # - * Expand IV
 # * Wait to unlock last
 # Note: You'll need to use 06_program.py
-# to harvest any necessary Hay, and the 11_program.py
+# to harvest any necessary Hay, and the 09_program.py
 # to harvest any necessary Carrots. You'll need to
 # use the clear() script from the README to
 # return the farm to grassland when harvesting Hay.

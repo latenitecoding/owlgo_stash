@@ -1,5 +1,5 @@
 from __builtins__ import *
-from _farming_novice import *
+from _farmhand import *
 
 # This program provides an option
 # to farm any necessary Pumpkins.
@@ -27,88 +27,26 @@ from _farming_novice import *
 # columns. If only water is being used, then mean growth time
 # can be easily reduced to 1 s if a Pumpkin has not finished
 # growing while ensuring that all re-planted Pumpkins will have
-# grown by a second pass of the same 2x columns. We can do even
-# better with Fertilizer and Water. A water level of at least 0.225
-# ensures that the max grow time of a Pumpkin is <= 2 s, which
-# is the growth reduction of Fertlizer. So a Pumpkin on a cell
-# with a water level of at least 0.225 grows instantly when
-# subjected to Fertilizer. Thus, we could know the outcome of
-# each re-planted Pumpkin with just one farm action (~0.2 s).
-# We could do the same for every Pumpkin from the beginning, but
-# that would require a significant amount of Fertilizer. The
-# tradeoff is that Fertilizer will infect the Pumpkin and thus
-# also the mega-Pumpkin causing half its yield to be Weird Substance.
-# Since the resulting mega-Pumpkin is just one Pumpkin, its
-# fairly easy to cure the mega-Pumpkin of its infection with just
-# 1x application of Weird Substance.
-
-def fertilize_pumpkin():
-    if (
-            num_items(Items.Fertilizer) > 0
-            and num_items(Items.Weird_Substance) > 0
-    ):
-        use_items(Items.Fertilizer)
-        return True
-    else:
-        return False
-
-
-def grow_pumpkin():
-    if (
-        get_entity_type() == Entities.Pumpkin
-        and can_harvest()
-    ):
-        return False, True
-
-    if (
-            get_entity_type() == Entities.Pumpkin
-            and (not can_harvest())
-            and (not fertilize_pumpkin())
-    ):
-        return False, False
-
-    while get_entity_type() != Entities.Pumpkin:
-        farm_cell(Entities.Pumpkin, 0.25)
-
-        if not fertilize_pumpkin():
-            return False, False
-
-    return True, True
-
-
-def replant_pumpkins(N, M):
-    is_infected = False
-
-    for i in range(N // 2):
-        needs_scan = True
-
-        while needs_scan:
-            needs_scan = False
-
-            for y in range(2 * M):
-                used_fertilizer, ok = grow_pumpkin()
-
-                is_infected = is_infected or used_fertilizer
-                need_scan = needs_scan or (not ok)
-
-                if y + 1 < M:
-                    move(North)
-                elif y + 1 == M:
-                    move(East)
-                elif y + 1 < 2 * M:
-                    move(South)
-
-    return is_infected
+# grown by a second pass of the same 2x columns. 
 
 
 def main():
-    while farm_plot(6, 6, Entities.Pumpkin):
-        go_home()
+    while farm_plot([6, 6], [Entities.Pumpkin], [0, 0]):
+        total_growing = 6 * 6
+        start_pos = [0, 0]
 
-        if replant_pumpkins(6, 6):
-            use_items(Items.Weird_Substance)
+        while total_growing > 0:
+            num_growing = 2 * 6
 
-        go_home()
+            while num_growing > 0:
+                _, num_growing, ok = plant_plot([2, 6], [Entities.Pumpkin], start_pos)
+                if not ok:
+                    clear_plot([6, 6])
+                    return
+
+            total_growing -= 2 * 6
+            start_pos = [start_pos[0] + 2, 0]
+
         harvest()
 
     clear_plot(6, 6)
@@ -117,4 +55,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

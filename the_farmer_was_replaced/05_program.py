@@ -4,8 +4,9 @@ from __builtins__ import *
 
 # This is the fifth program. Use it
 # to unlock the following upgrades:
-# - Speed II
+# - Speed II (unlock first)
 # - Carrots I
+# - Watering I
 #
 # Then REPLACE 03_program.py with 06_program.py
 # AND MOVE to 06_program.py. DO NOT DELETE
@@ -25,6 +26,11 @@ from __builtins__ import *
 # replaced after the next Speed upgrade.
 
 while True:
+    while get_pos_x() > 0:
+        move(West)
+    while get_pos_y() > 0:
+        move(South)
+
     for i in range(8):
         if can_harvest():
             harvest()
